@@ -259,7 +259,7 @@ module Punchblock
             component_class = case command.input.recognizer
             when 'unimrcp'
               case command.output.renderer
-              when 'unimrcp'
+              when 'unimrcp', 'native_or_unimrcp'
                 Component::MRCPPrompt
               when 'asterisk'
                 Component::MRCPNativePrompt
