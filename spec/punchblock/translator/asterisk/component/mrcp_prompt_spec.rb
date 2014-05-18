@@ -163,7 +163,7 @@ module Punchblock
           end
 
           describe 'Output#renderer' do
-            [nil, :unimrcp].each do |renderer|
+            [nil, :unimrcp, :native_or_unimrcp].each do |renderer|
               context renderer.to_s do
                 let(:output_command_opts) { { renderer: renderer } }
 
