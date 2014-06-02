@@ -1,3 +1,6 @@
+# [ifbyphone-develop](https://github.com/cloudvox/punchblock)
+  * Feature: Support `:native_or_unimrcp` renderer when using `:unimrcp` recognizer for ASR
+
 # [develop](https://github.com/adhearsion/punchblock)
   * Change: Remove support for FreeSWITCH translator on Inbound EventSocket
   * Bugfix: Ensure components are deregistered from asterisk translator once the call is ended ([#250](https://github.com/adhearsion/punchblock/pull/250))
