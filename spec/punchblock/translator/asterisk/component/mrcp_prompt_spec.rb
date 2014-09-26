@@ -701,6 +701,24 @@ module Punchblock
                 subject.execute
               end
             end
+
+            context 'a positive number (non-header)' do
+              let(:input_command_opts) { { speech_complete_timeout: 1000 } }
+
+              it 'should pass the dit option to SynthAndRecog' do
+                expect_synthandrecog_with_options(/sct=1000/)
+                subject.execute
+              end
+            end
+
+            context 'unset (non-header)' do
+              let(:input_command_opts) { { speech_complete_timeout: nil } }
+
+              it 'should not pass any options to SynthAndRecog' do
+                expect_synthandrecog_with_options(//)
+                subject.execute
+              end
+            end
           end
 
           describe 'Input#headers(Speed-Vs-Accuracy)' do
