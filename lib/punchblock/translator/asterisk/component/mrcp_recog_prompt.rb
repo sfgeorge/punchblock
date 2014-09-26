@@ -94,7 +94,8 @@ module Punchblock
             @inter_digit_timeout = input_node.inter_digit_timeout || -1
             @recognition_timeout = input_node.recognition_timeout || -1
             @max_silence = input_node.max_silence || -1
-            @speech_complete_timeout = input_node.headers['Speech-Complete-Timeout'] || -1
+            @speech_complete_timeout = input_node.speech_complete_timeout ||
+                                       input_node.headers['Speech-Complete-Timeout'] || -1
             @speed_vs_accuracy = input_node.headers['Speed-Vs-Accuracy']
             @n_best_list_length = input_node.headers['N-Best-List-Length']
             @start_input_timers = input_node.headers['Start-Input-Timers']
