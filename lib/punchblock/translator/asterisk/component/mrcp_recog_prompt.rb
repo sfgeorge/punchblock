@@ -63,6 +63,7 @@ module Punchblock
               opts[:nit] = @initial_timeout if @initial_timeout > -1
               opts[:dit] = @inter_digit_timeout if @inter_digit_timeout > -1
               opts[:dttc] = input_node.terminator if input_node.terminator
+              opts[:dtt] = input_node.dtmf_term_timeout if input_node.dtmf_term_timeout
               opts[:spl] = input_node.language if input_node.language
               opts[:ct] = input_node.min_confidence if input_node.min_confidence
               opts[:sl] = input_node.sensitivity if input_node.sensitivity
@@ -93,7 +94,8 @@ module Punchblock
             @inter_digit_timeout = input_node.inter_digit_timeout || -1
             @recognition_timeout = input_node.recognition_timeout || -1
             @max_silence = input_node.max_silence || -1
-            @speech_complete_timeout = input_node.headers['Speech-Complete-Timeout'] || -1
+            @speech_complete_timeout = input_node.speech_complete_timeout ||
+                                       input_node.headers['Speech-Complete-Timeout'] || -1
             @speed_vs_accuracy = input_node.headers['Speed-Vs-Accuracy']
             @n_best_list_length = input_node.headers['N-Best-List-Length']
             @start_input_timers = input_node.headers['Start-Input-Timers']
