@@ -16,7 +16,12 @@ module Punchblock
       end
 
       def run
+begin
         start_ami_client
+rescue StandardError => ex
+  pb_logger.error "[SG] caught internal error #{e.inspect}\n  #{(e.backtrace || ['EMPTY BACKTRACE']).join("\n  ")}"
+end
+  pb_logger.warn "[SG] the mess hall: @ami_client: #{@ami_client.inspect}. @translator: #{@translator.inspect}"
         raise DisconnectedError
       end
 
@@ -46,8 +51,10 @@ module Punchblock
 
       def start_ami_client
         @ami_client = new_ami_stream unless ami_client.alive?
+  pb_logger.info "[SG] new ami_client.object_id is #{ami_client.object_id.inspect}"
         ami_client.async.run
         Celluloid::Actor.join(ami_client)
+  pb_logger.warn "[SG] start_ami_client is exited 'cleanly'"
       end
 
       def new_call_uri
