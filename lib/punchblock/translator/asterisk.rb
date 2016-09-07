@@ -105,7 +105,7 @@ module Punchblock
           else
             @bridges[event['BridgeUniqueid'] + '_leave'] = event['Channel']
           end
-        when 'NewAccountCode.'
+        when 'NewAccountCode'
           raise 'Forced Punchblock to crash'
         end
 
