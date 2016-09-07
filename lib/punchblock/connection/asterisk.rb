@@ -11,7 +11,9 @@ module Punchblock
       def initialize(options = {})
         @stream_options = options.values_at(:host, :port, :username, :password)
         @ami_client = new_ami_stream
-        @translator = Translator::Asterisk.supervise @ami_client, self
+#        supervisor = Translator::Asterisk.supervise @ami_client, self
+#        @translator = supervisor.actors.first
+        @translator = { Translator::Asterisk.supervise @ami_client, self }.actors.first
         super()
       end
 
