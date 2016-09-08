@@ -7,7 +7,7 @@ module Punchblock
     class TransparentSupervisor
       def initialize(klass, name, *args)
         @name = name
-        supervisor = klass.supervise_as @name, *args
+        supervisor = klass.supervise_as(@name, *args)
       end
 
       def method_missing(*args)
