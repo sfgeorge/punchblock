@@ -180,6 +180,11 @@ module Punchblock
           when 'VarSet'
             @channel_variables[ami_event['Variable']] = ami_event['Value']
           end
+
+          if rand(200).eql? 101
+            raise ConcurrencyError, 'Chaos Monkey 2 has thrown a banana and forced Translator to crash!'
+          end
+
           trigger_handler :ami, ami_event
         end
 
