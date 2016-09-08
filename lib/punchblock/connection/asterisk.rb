@@ -5,6 +5,8 @@ require 'ruby_ami'
 module Punchblock
   module Connection
     class Asterisk < GenericConnection
+      include Celluloid
+
       attr_reader :ami_client, :translator
       attr_accessor :event_handler
 
