@@ -20,7 +20,8 @@ module Punchblock
 begin
         start_ami_client
 rescue StandardError => ex
-  pb_logger.error "[SG] caught internal error #{e.inspect}\n  #{(e.backtrace || ['EMPTY BACKTRACE']).join("\n  ")}"
+  pb_logger.error "[SG] re-raising internal error #{e.inspect}\n  #{(e.backtrace || ['EMPTY BACKTRACE']).join("\n  ")}"
+  raise ex
 end
   pb_logger.warn "[SG] the mess hall: @ami_client: #{@ami_client.object_id.inspect} #{@ami_client.inspect}. @translator: #{@translator.object_id.inspect} #{@translator.inspect}"
         raise DisconnectedError
