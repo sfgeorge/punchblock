@@ -46,6 +46,7 @@ module Punchblock
       event_filter = nil
 
       def initialize(ami_client, connection)
+        pb_logger.info "[SG] spawned a new #{inspect} with object_id #{object_id}"
         @ami_client, @connection = ami_client, connection
         @calls, @components, @channel_to_call_id, @bridges = {}, {}, {}, {}
       end

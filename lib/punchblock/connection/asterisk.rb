@@ -5,16 +5,14 @@ require 'ruby_ami'
 module Punchblock
   module Connection
     class Asterisk < GenericConnection
-      include Celluloid
-
       attr_reader :ami_client, :translator
       attr_accessor :event_handler
 
       def initialize(options = {})
         @stream_options = options.values_at(:host, :port, :username, :password)
         @ami_client = new_ami_stream
-        @translator = Translator::Asterisk.new_link @ami_client, self
-        # @translator = Translator::Asterisk.supervise(@ami_client, self).actors.first
+        @translator = Translator::Asterisk.pool args: [@ami_client, self]
+        # @translator = Translator::Asterisk.pool size: 2, args: [@ami_client, self]
         super()
       end
 
