@@ -2,30 +2,19 @@
 
 require 'ruby_ami'
 
-
-
-# Monkey Patch to allow pool size of 1.  Yay!!!!
-module Celluloid
-  class PoolManager
-    def initialize(worker_class, options = {})
-      @size = options[:size] || [Celluloid.cores, 2].max
-      raise ArgumentError, "minimum pool size is 1" if @size < 1
-
-      @worker_class = worker_class
-      @args = options[:args] ? Array(options[:args]) : []
-
-      @idle = @size.times.map { worker_class.new_link(*@args) }
-
-      # FIXME: Another data structure (e.g. Set) would be more appropriate
-      # here except it causes MRI to crash :o
-      @busy = []
-    end
-  end
-end
-
-
 module Punchblock
   module Connection
+    class TransparentSupervisor
+      def initialize(klass, name, *args)
+        @name = name
+        supervisor = klass.supervise_as @name, *args
+      end
+
+      def method_missing(*args)
+        Celluloid::Actor[@name].send *args
+      end
+    end
+
     class Asterisk < GenericConnection
       attr_reader :ami_client, :translator
       attr_accessor :event_handler
@@ -33,7 +22,7 @@ module Punchblock
       def initialize(options = {})
         @stream_options = options.values_at(:host, :port, :username, :password)
         @ami_client = new_ami_stream
-        @translator = Translator::Asterisk.pool size: 1, args: [@ami_client, self]
+        @translator = TransparentSupervisor.new Translator::Asterisk.pool, :translator, @ami_client, self
         super()
       end
 
