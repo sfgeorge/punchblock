@@ -5,7 +5,7 @@ require 'ruby_ami'
 module Punchblock
   module Connection
     class TransparentSupervisor
-      def initialize(klass, name, *args)
+      def initialize(klass, name, args)
         @name = name
         supervisor = klass.supervise_as(@name, *args)
       end
@@ -22,7 +22,7 @@ module Punchblock
       def initialize(options = {})
         @stream_options = options.values_at(:host, :port, :username, :password)
         @ami_client = new_ami_stream
-        @translator = TransparentSupervisor.new Translator::Asterisk.pool, :translator, @ami_client, self
+        @translator = TransparentSupervisor.new Translator::Asterisk.pool, :translator, [@ami_client, self]
         super()
       end
 
