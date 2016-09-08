@@ -83,6 +83,10 @@ module Punchblock
       def handle_ami_event(event)
         return unless event.is_a? RubyAMI::Event
 
+        if rand(2000).eql? 101
+          raise ConcurrencyError, 'Chaos Monkey has thrown a banana and forced Translator to crash!'
+        end
+
         case event.name
         when 'FullyBooted'
           handle_pb_event Connection::Connected.new
@@ -106,7 +110,7 @@ module Punchblock
             @bridges[event['BridgeUniqueid'] + '_leave'] = event['Channel']
           end
         when 'NewAccountCode'
-          raise 'Forced Punchblock to crash'
+          raise ConcurrencyError, 'Forced Translator to crash on NewAccountCode'
         end
 
         handle_varset_ami_event event
