@@ -11,7 +11,8 @@ module Punchblock
       def initialize(options = {})
         @stream_options = options.values_at(:host, :port, :username, :password)
         @ami_client = new_ami_stream
-        @translator = Translator::Asterisk.supervise(@ami_client, self).actors.first
+        @translator = Translator::Asterisk.new_link @ami_client, self
+        # @translator = Translator::Asterisk.supervise(@ami_client, self).actors.first
         super()
       end
 
@@ -21,7 +22,7 @@ begin
 rescue StandardError => ex
   pb_logger.error "[SG] caught internal error #{e.inspect}\n  #{(e.backtrace || ['EMPTY BACKTRACE']).join("\n  ")}"
 end
-  pb_logger.warn "[SG] the mess hall: @ami_client: #{@ami_client.inspect}. @translator: #{@translator.inspect}"
+  pb_logger.warn "[SG] the mess hall: @ami_client: #{@ami_client.object_id.inspect} #{@ami_client.inspect}. @translator: #{@translator.object_id.inspect} #{@translator.inspect}"
         raise DisconnectedError
       end
 
@@ -51,7 +52,7 @@ end
 
       def start_ami_client
         @ami_client = new_ami_stream unless ami_client.alive?
-  pb_logger.info "[SG] new ami_client.object_id is #{ami_client.object_id.inspect}"
+  pb_logger.info "[SG] new @ami_client.object_id is #{@ami_client.object_id.inspect}"
         ami_client.async.run
         Celluloid::Actor.join(ami_client)
   pb_logger.warn "[SG] start_ami_client is exited 'cleanly'"
