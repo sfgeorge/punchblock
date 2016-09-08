@@ -83,7 +83,7 @@ module Punchblock
 
       def handle_ami_event(event)
         return unless event.is_a? RubyAMI::Event
-
+begin
         if rand(2000).eql? 101
           raise ConcurrencyError, 'Chaos Monkey has thrown a banana and forced Translator to crash!'
         end
@@ -120,6 +120,9 @@ module Punchblock
         if !ami_event_known_call?(event) && self.class.event_passes_filter?(event)
           handle_pb_event Event::Asterisk::AMI::Event.new(name: event.name, headers: event.headers)
         end
+rescue StandardError => ex
+  pb_logger.warn "Rescueing mysterious monkey pile of #{ex} #{ex.inspect}.  Swallowed exception"
+end
       end
 
       def handle_pb_event(event)
