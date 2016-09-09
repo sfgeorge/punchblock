@@ -25,15 +25,7 @@ module Punchblock
       describe '#ami_client' do
         subject { connection.ami_client }
 
-        it { is_expected.to be_a RubyAMIStreamProxy }
-      end
-
-      describe '#ami_client' do
-        describe '#stream' do
-          subject { connection.ami_client.stream }
-
-          it { is_expected.to be_a RubyAMI::Stream }
-        end
+        it { is_expected.to respond_to :send_action }
       end
 
       it 'should set the connection on the translator' do
