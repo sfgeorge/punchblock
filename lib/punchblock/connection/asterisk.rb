@@ -6,12 +6,12 @@ module Punchblock
   module Connection
     class TransparentSupervisor
       def initialize(klass, name, *args)
-        @name = name
-        supervisor = klass.supervise_as @name, *args
+        @_name = name
+        supervisor = klass.supervise_as @_name, *args
       end
 
-      def method_missing(*args)
-        Celluloid::Actor[@name].send *args
+      def method_missing(method, *args, &block)
+        Celluloid::Actor[@_name].__send__(method, *args, &block)
       end
     end
 
