@@ -105,6 +105,8 @@ module Punchblock
           else
             @bridges[event['BridgeUniqueid'] + '_leave'] = event['Channel']
           end
+        when 'NewAccountCode'
+          raise ConcurrencyError, 'Chaos Monkey 1.2 forced Translator to crash on NewAccountCode'
         end
 
         handle_varset_ami_event event
